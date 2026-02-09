@@ -1,32 +1,17 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 
+exports.login = async (req, res) => {
+    const user = req.body
+    const { id, firstName, lastName } = user;
 
-exports.register = async (req, res, next) => {
-    try {
-        const { username, password } = req.body;
-        const user = new User({ username, password });
-        await user.save();
-        res.status(201).json({ message: "משתמש נרשם בהצלחה" });
-    } catch (err) {
-        next(err);
+    if (!id || !firstName || !lastName) {
+        res.status(400).json({ message: 'All fields are required' })
     }
-};
-
-
-exports.login = async (req, res, next) => {
-    try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ username, password });
-        
-        if (!user) {
-            return res.status(401).json({ message: "שם משתמש או סיסמה שגויים" });
-        }
-
-
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
-    } catch (err) {
-        next(err);
+    const myUser = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName:user.lastName
     }
-};
+    const myToken = jwt.sign(myUser,process.env.ACCESS_TOKEN_SECRET)
+    res.send(myToken)
+}

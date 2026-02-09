@@ -1,13 +1,9 @@
 const Recipe = require('../models/Recipe');
 
 exports.addRecipe = async (req, res, next) => {
-    try {
-        const newRecipe = new Recipe(req.body); 
-        await newRecipe.save();
-        res.status(201).json({ message: "המתכון נשמר ב-Compass", recipe: newRecipe });
-    } catch (err) {
-        next(err);
-    }
+    const recipe = await recipe.create(req.body);
+    res.json(recipe)
+
 };
 
 exports.updateRecipe = async (req, res, next) => {
@@ -30,3 +26,8 @@ exports.deleteRecipe = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.getRecipe = async (req, res) =>{
+    const recipe = await recipe.findOne(req.body);
+    res.json(recipe)
+}

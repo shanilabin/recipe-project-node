@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => {
+const verifyJWT = (req, res, next) =>  {
     const token = req.header('Authorization');
     if (!token) return res.status(401).json({ message: "גישה נדחתה, חסר טוקן" });
 
@@ -12,3 +12,6 @@ module.exports = (req, res, next) => {
         res.status(400).json({ message: "טוקן לא תקין" });
     }
 };
+
+
+module.exports = verifyJWT
